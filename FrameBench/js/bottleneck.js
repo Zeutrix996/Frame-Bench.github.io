@@ -1,0 +1,156 @@
+function initBottleneckPage() {
+  const gpuSelect = document.getElementById("gpu");
+  const cpuSelect = document.getElementById("cpu");
+  if (!gpuSelect || !cpuSelect || typeof gpus === "undefined") return;
+
+  gpus.forEach(g => gpuSelect.add(new Option(g.name)));
+  cpus.forEach(c => cpuSelect.add(new Option(c.name)));
+}
+
+function calcBottleneck() {
+  const gpuSelect = document.getElementById("gpu");
+  const cpuSelect = document.getElementById("cpu");
+  const out = document.getElementById("out");
+  if (!gpuSelect || !cpuSelect || !out) return;
+
+  let g = gpus.find(x => x.name === gpuSelect.value);
+  let c = cpus.find(x => x.name === cpuSelect.value);
+  if (!g || !c) return;
+
+  let gpuScore = g.score;
+  let cpuScore = c.score;
+  let diff = gpuScore - cpuScore;
+
+  let type, explanation, culprit, recommendation;
+
+  if (diff > 15) {
+    type = "CPU Bottleneck (CPU limitiert)";
+    explanation = `Deine GPU (${g.name}) ist deutlich stärker als deine CPU (${c.name}). Die CPU kann nicht schnell genug Daten an die GPU liefern, wodurch die GPU unter ihren Möglichkeiten arbeitet.`;
+    culprit = "CPU ist der Flaschenhals";
+    recommendation = getCPURecommendation(c.score, g.score);
+  } else if (diff < -15) {
+    type = "GPU Bottleneck (GPU limitiert)";
+    explanation = `Deine CPU (${c.name}) ist deutlich stärker als deine GPU (${g.name}). Die GPU kann die von der CPU berechneten Daten nicht schnell genug verarbeiten, wodurch die CPU warten muss.`;
+    culprit = "GPU ist der Flaschenhals";
+    recommendation = getGPURecommendation(g.score, c.score);
+  } else {
+    type = "Balanced System";
+    explanation = `Deine CPU (${c.name}) und GPU (${g.name}) sind gut aufeinander abgestimmt. Beide Komponenten arbeiten effizient zusammen.`;
+    culprit = "Kein Flaschenhals";
+    recommendation = "Dein System ist gut balanciert. Für maximale Leistung kannst du beide Komponenten gleichzeitig upgraden.";
+  }
+
+  let strength = Math.min(100, Math.round(Math.abs(diff) * 2));
+  let b1080 = Math.min(100, Math.round(strength * 1.2));
+  let b1440 = Math.min(100, Math.round(strength));
+  let b4k = Math.min(100, Math.round(strength * 0.8));
+
+  let avg = (gpuScore + cpuScore) / 2;
+  let perf =
+    avg < 50 ? { t30: 40, t60: 10, t120: 0 } :
+    avg < 70 ? { t30: 75, t60: 40, t120: 10 } :
+    avg < 90 ? { t30: 95, t60: 75, t120: 30 } :
+    { t30: 100, t60: 95, t120: 80 };
+
+  let psu = recommendPSU(g.tdp, c.tdp);
+
+  out.innerHTML = `
+<div class="card">
+  <h2>${type}</h2>
+  <p class="small">${g.name} + ${c.name}</p>
+  <p>Stärke: <b>${strength}%</b></p>
+  <p><strong>Flaschenhals:</strong> ${culprit}</p>
+  <p><strong>Erklärung:</strong> ${explanation}</p>
+  <p><strong>Empfehlung:</strong> ${recommendation}</p>
+  <p>${psu}</p>
+  <canvas id="bottleneckChart"></canvas>
+  <h3>Spielbarkeit</h3>
+  <p>≥30 FPS: <b>${perf.t30}%</b></p>
+  <p>≥60 FPS: <b>${perf.t60}%</b></p>
+  <p>≥120 FPS: <b>${perf.t120}%</b></p>
+</div>`;
+
+  new Chart(document.getElementById("bottleneckChart"), {
+    type: "bar",
+    data: {
+      labels: ["1080p", "1440p", "4K", "30 FPS", "60 FPS", "120 FPS"],
+      datasets: [{
+        label: "Performance",
+        data: [b1080, b1440, b4k, perf.t30, perf.t60, perf.t120],
+        backgroundColor: [
+          getColor(100 - b1080),
+          getColor(100 - b1440),
+          getColor(100 - b4k),
+          "#00ffd5",
+          "#4aa3ff",
+          "#ff4d4d"
+        ]
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: { legend: { display: false } },
+      scales: { y: { beginAtZero: true, max: 100 } }
+    }
+  });
+}
+
+function getCPURecommendation(cpuScore, gpuScore) {
+  const targetScore = gpuScore - 5;
+  const recommendations = [];
+  
+  // AMD CPUs
+  const amdUpgrade = amdCPUs.filter(c => c.score >= targetScore && c.score > cpuScore)
+    .sort((a, b) => a.score - b.score)
+    .slice(0, 3);
+  
+  if (amdUpgrade.length > 0) {
+    recommendations.push(`AMD: ${amdUpgrade.map(c => c.name).join(', ')}`);
+  }
+  
+  // Intel CPUs
+  const intelUpgrade = intelCPUs.filter(c => c.score >= targetScore && c.score > cpuScore)
+    .sort((a, b) => a.score - b.score)
+    .slice(0, 3);
+  
+  if (intelUpgrade.length > 0) {
+    recommendations.push(`Intel: ${intelUpgrade.map(c => c.name).join(', ')}`);
+  }
+  
+  if (recommendations.length === 0) {
+    return "Deine CPU ist bereits sehr gut. Für maximale Leistung kannst du eine CPU mit mehr Kernen oder höherem Takt in Betracht ziehen.";
+  }
+  
+  return `Upgrade auf eine stärkere CPU empfohlen: ${recommendations.join(' | ')}`;
+}
+
+function getGPURecommendation(gpuScore, cpuScore) {
+  const targetScore = cpuScore + 5;
+  const recommendations = [];
+  
+  // AMD GPUs
+  const amdUpgrade = amdGPUs.filter(g => g.score >= targetScore && g.score > gpuScore)
+    .sort((a, b) => a.score - b.score)
+    .slice(0, 3);
+  
+  if (amdUpgrade.length > 0) {
+    recommendations.push(`AMD: ${amdUpgrade.map(g => g.name).join(', ')}`);
+  }
+  
+  // NVIDIA GPUs
+  const nvidiaUpgrade = nvidiaGPUs.filter(g => g.score >= targetScore && g.score > gpuScore)
+    .sort((a, b) => a.score - b.score)
+    .slice(0, 3);
+  
+  if (nvidiaUpgrade.length > 0) {
+    recommendations.push(`NVIDIA: ${nvidiaUpgrade.map(g => g.name).join(', ')}`);
+  }
+  
+  if (recommendations.length === 0) {
+    return "Deine GPU ist bereits sehr gut. Für maximale Leistung kannst du eine GPU mit mehr VRAM oder höherem Takt in Betracht ziehen.";
+  }
+  
+  return `Upgrade auf eine stärkere GPU empfohlen: ${recommendations.join(' | ')}`;
+}
+
+document.addEventListener("DOMContentLoaded", initBottleneckPage);
