@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FrameBench - Hardware Performance Analysis</title>
+<link rel="stylesheet" href="css/style.css">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="icon" type="image/x-icon" href="favicon.ico">
+<meta name="theme-color" content="#00ffd5">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="FrameBench">
+</head>
+<body>
+
+<div id="site-header" data-base="" data-page="home"></div>
+
+<!-- Beta Notice Banner -->
+<div class="beta-banner">
+  <div class="beta-content">
+    <span class="beta-icon">⚠️</span>
+    <div class="beta-text">
+      <strong>Beta-Phase im Aufbau</strong>
+      <p class="small">Diese Website befindet sich noch in der Entwicklung. Alle Daten und Berechnungen sind experimentell und können ungenau sein. Die Angaben erfolgen ohne Gewähr.</p>
+    </div>
+  </div>
+</div>
+
+<main class="container">
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-content">
+      <h1 class="hero-title">FrameBench</h1>
+      <p class="hero-subtitle">Professionelle Hardware-Leistungsanalyse</p>
+      <p class="hero-description">
+        Analysiere deine Hardwareleistung mit präzisen FPS-Berechnungen, 
+        CPU- und GPU-Vergleichen sowie Echtzeit-Monitoring.
+      </p>
+      <div class="hero-buttons">
+        <a href="pages/live-monitoring.html" class="btn-primary">Live Monitoring starten</a>
+        <a href="pages/fps.html" class="btn-secondary">FPS Benchmark</a>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="hero-chart">
+        <div class="chart-bar" style="height: 70%"></div>
+        <div class="chart-bar" style="height: 85%"></div>
+        <div class="chart-bar" style="height: 60%"></div>
+        <div class="chart-bar" style="height: 90%"></div>
+        <div class="chart-bar" style="height: 75%"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section class="features-section">
+    <h2 class="section-title">Unsere Tools</h2>
+    <div class="dashboard-grid">
+      <div class="card feature-card">
+        <div class="card-icon">🎮</div>
+        <h2>FPS Benchmark</h2>
+        <p class="small">Berechne FPS für GPU, CPU, Auflösung und Spiel mit präzisen Algorithmen.</p>
+        <a href="pages/fps.html" class="card-link">FPS Test starten →</a>
+      </div>
+
+      <div class="card feature-card">
+        <div class="card-icon">⚡</div>
+        <h2>CPU Analyse</h2>
+        <p class="small">Vergleiche Prozessoren nach Score, Kernen, TDP und Preis-Leistung.</p>
+        <a href="pages/cpu-compare.html" class="card-link">CPU vergleichen →</a>
+      </div>
+
+      <div class="card feature-card">
+        <div class="card-icon">🎨</div>
+        <h2>GPU Vergleich</h2>
+        <p class="small">Vergleiche Grafikkarten, VRAM und Gaming-FPS für verschiedene Titel.</p>
+        <a href="pages/gpu-compare.html" class="card-link">GPU vergleichen →</a>
+      </div>
+
+      <div class="card feature-card">
+        <div class="card-icon">🔍</div>
+        <h2>Bottleneck Check</h2>
+        <p class="small">Finde heraus, ob CPU oder GPU dein System limitiert und optimiere deine Konfiguration.</p>
+        <a href="pages/compare.html" class="card-link">Bottleneck prüfen →</a>
+      </div>
+
+      <div class="card feature-card">
+        <div class="card-icon">💰</div>
+        <h2>GPU Finder</h2>
+        <p class="small">Finde die beste GPU für dein Budget und deine Anforderungen.</p>
+        <a href="pages/finder.html" class="card-link">GPU suchen →</a>
+      </div>
+
+      <div class="card feature-card">
+        <div class="card-icon">📊</div>
+        <h2>Ranking</h2>
+        <p class="small">Top-Listen für GPUs und CPUs nach Score, Preis und Leistung.</p>
+        <a href="pages/ranking.html" class="card-link">Ranking ansehen →</a>
+      </div>
+
+      <div class="card feature-card highlight-card">
+        <div class="card-icon">📡</div>
+        <h2>Live Monitoring</h2>
+        <p class="small">Echtzeitdaten für FPS, CPU, RAM und Browser-Informationen.</p>
+        <a href="pages/live-monitoring.html" class="card-link">Monitoring starten →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats Section -->
+  <section class="stats-section">
+    <div class="stats-grid">
+      <div class="stat-item">
+        <div class="stat-number">1000+</div>
+        <div class="stat-label">GPUs in Datenbank</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number">500+</div>
+        <div class="stat-label">CPUs verglichen</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number">50+</div>
+        <div class="stat-label">Spiele getestet</div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<div id="site-footer" data-base="" data-page="home"></div>
+
+<script src="js/header.js"></script>
+<script src="js/footer.js"></script>
+<script>
+  // Service Worker Registration
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/sw.js')
+        .then(registration => {
+          console.log('ServiceWorker registration successful');
+        })
+        .catch(error => {
+          console.log('ServiceWorker registration failed: ', error);
+        });
+    });
+  }
+</script>
+</body>
+</html>

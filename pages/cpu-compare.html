@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CPU Vergleich – FrameBench</title>
+<link rel="stylesheet" href="../css/style.css">
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="icon" type="image/x-icon" href="../favicon.ico">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+<div id="site-header" data-base="../" data-page="cpu"></div>
+
+<main class="container">
+  <h1>CPU Vergleich</h1>
+  <p class="small">Vergleiche zwei Prozessoren direkt miteinander.</p>
+
+  <div class="card">
+    <div class="compare-row">
+      <select id="c1"></select>
+      <select id="c2"></select>
+    </div>
+    <button onclick="compareCPU()">Vergleichen</button>
+  </div>
+
+  <div id="out"></div>
+</main>
+
+<div id="site-footer" data-base="../" data-page="cpu"></div>
+
+<script src="../js/amd-gpu.js"></script>
+<script src="../js/nvidia-gpu.js"></script>
+<script src="../js/amd-cpu.js"></script>
+<script src="../js/intel-cpu.js"></script>
+<script src="../js/data.js"></script>
+<script src="../js/utils.js"></script>
+<script src="../js/header.js"></script>
+<script src="../js/footer.js"></script>
+<script src="../js/cpu.js"></script>
+<script>
+cpus.forEach(c => {
+  c1.add(new Option(c.name));
+  c2.add(new Option(c.name));
+});
+</script>
+</body>
+</html>

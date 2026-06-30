@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="192" height="192" viewBox="0 0 192 192">
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#041a1d"/>
+      <stop offset="100%" style="stop-color:#0a2e33"/>
+    </linearGradient>
+    <linearGradient id="chipGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#00ffd5"/>
+      <stop offset="100%" style="stop-color:#00c4a8"/>
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="192" height="192" fill="url(#bgGradient)" rx="32"/>
+  
+  <!-- Chip/Processor symbol centered -->
+  <g transform="translate(96, 96)">
+    <!-- Chip body -->
+    <rect x="-48" y="-48" width="96" height="96" 
+          fill="url(#chipGradient)" 
+          rx="12"/>
+    
+    <!-- Inner square -->
+    <rect x="-24" y="-24" width="48" height="48" 
+          fill="#041a1d" 
+          rx="8"/>
+    
+    <!-- Chip pins - left -->
+    <rect x="-60" y="-24" width="12" height="8" fill="#00ffd5" rx="2"/>
+    <rect x="-60" y="-8" width="12" height="8" fill="#00ffd5" rx="2"/>
+    <rect x="-60" y="8" width="12" height="8" fill="#00ffd5" rx="2"/>
+    <rect x="-60" y="24" width="12" height="8" fill="#00ffd5" rx="2"/>
+    
+    <!-- Chip pins - right -->
+    <rect x="48" y="-24" width="12" height="8" fill="#00ffd5" rx="2"/>
+    <rect x="48" y="-8" width="12" height="8" fill="#00ffd5" rx="2"/>
+    <rect x="48" y="8" width="12" height="8" fill="#00ffd5" rx="2"/>
+    <rect x="48" y="24" width="12" height="8" fill="#00ffd5" rx="2"/>
+    
+    <!-- Chip pins - top -->
+    <rect x="-24" y="-60" width="8" height="12" fill="#00ffd5" rx="2"/>
+    <rect x="-8" y="-60" width="8" height="12" fill="#00ffd5" rx="2"/>
+    <rect x="8" y="-60" width="8" height="12" fill="#00ffd5" rx="2"/>
+    <rect x="24" y="-60" width="8" height="12" fill="#00ffd5" rx="2"/>
+    
+    <!-- Chip pins - bottom -->
+    <rect x="-24" y="48" width="8" height="12" fill="#00ffd5" rx="2"/>
+    <rect x="-8" y="48" width="8" height="12" fill="#00ffd5" rx="2"/>
+    <rect x="8" y="48" width="8" height="12" fill="#00ffd5" rx="2"/>
+    <rect x="24" y="48" width="8" height="12" fill="#00ffd5" rx="2"/>
+    
+    <!-- FB text in center -->
+    <text x="0" y="8" 
+          font-family="Arial, sans-serif" 
+          font-size="32" 
+          font-weight="bold" 
+          fill="#00ffd5" 
+          text-anchor="middle">FB</text>
+  </g>
+</svg>
